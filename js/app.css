@@ -1,0 +1,25 @@
+.draw {
+  position: relative;
+  width: 500px;
+  height: 500px;
+  border: 1px solid black;
+}
+
+.dot {
+  height: 5px;
+  width: 5px;
+  display: inline-block;
+  position: absolute;
+  border-radius: 50%;
+  background-color: black;
+}
+
+.hidden {
+  display: none;
+}
+
+.solution {
+  width: 500px;
+  height: 500px;
+  border: 1px solid black;
+}

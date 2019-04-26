@@ -23,5 +23,13 @@ module.exports = {
       // WasmPackPlugin defaults to compiling in "dev" profile. To change that, use forceMode: 'release':
       // forceMode: 'release'
     }),
-  ]
+  ],
+  module: {
+    rules: [
+      {
+        test: /\.css$/,
+        use: [{ loader: 'style-loader' }, { loader: 'css-loader' }],
+      }
+    ]
+  }
 };
