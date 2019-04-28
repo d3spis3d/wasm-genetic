@@ -4,24 +4,20 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 const dist = path.resolve(__dirname, "dist");
 const WasmPackPlugin = require("@wasm-tool/wasm-pack-plugin");
 
-module.exports = {
+const appConfig = {
+  target: 'web',
   entry: "./js/index.js",
   output: {
     path: dist,
-    filename: "bundle.js"
+    filename: '[name].[hash].js',
   },
   devServer: {
-    contentBase: dist,
+    contentBase: dist
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: 'index.html'
-    }),
-
-    new WasmPackPlugin({
-      crateDirectory: path.resolve(__dirname, "crate"),
-      // WasmPackPlugin defaults to compiling in "dev" profile. To change that, use forceMode: 'release':
-      // forceMode: 'release'
+      template: 'index.html',
+      chunks: ['main']
     }),
   ],
   module: {
@@ -32,4 +28,29 @@ module.exports = {
       }
     ]
   }
-};
+}
+
+workerConfig = {
+  target: 'webworker',
+  entry: "./js/worker.js",
+  output: {
+    path: dist,
+    filename: 'worker.js',
+    globalObject: 'self'
+  },
+  devServer: {
+    contentBase: dist
+  },
+  resolve: {
+    extensions: [".js", ".wasm"]
+  },
+  plugins: [
+    new WasmPackPlugin({
+      crateDirectory: path.resolve(__dirname, "crate"),
+      // WasmPackPlugin defaults to compiling in "dev" profile. To change that, use forceMode: 'release':
+      // forceMode: 'release'
+    }),
+  ]
+}
+
+module.exports = [appConfig, workerConfig]
