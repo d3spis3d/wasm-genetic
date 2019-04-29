@@ -24,9 +24,4 @@ import("../crate/pkg").then(({ Simulation }) => {
       fitness: result[1]
     })
   }
-
-  console.log('sending ready message')
-  postMessage({
-    type: 'ready'
-  })
 })

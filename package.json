@@ -5,7 +5,7 @@
   "repository": "https://github.com/wasm-genetic",
   "license": "(MIT OR Apache-2.0)",
   "scripts": {
-    "start": "http-server dist/",
+    "start": "webpack-dev-server -d",
     "build": "rm -rf dist && webpack"
   },
   "devDependencies": {
