@@ -6,28 +6,31 @@
   </head>
   <body>
     <h1>Travelling Salesman Problem</h1>
-    <h2>Solved with Genetic Algorithm</h2>
+    <h2>Solved with a Genetic Algorithm</h2>
     <form id="simulation">
       <label>Iterations</label>
-      <input name="iterations" />
+      <input name="iterations" value="500"/>
       <br />
       <label>Population size</label>
-      <input name="pop_size" />
+      <input name="pop_size"  value="350"/>
       <br />
       <label>Crossover rate</label>
-      <input name="crossover" />
+      <input name="crossover" value="0.5"/>
       <br />
       <label>Mutation rate</label>
-      <input name="mutation" />
+      <input name="mutation" value="0.01"/>
       <br />
       <label>Survival rate</label>
-      <input name="survival" />
+      <input name="survival" value="0.3"/>
       <br />
       <label>Draw your cities</label>
+      <button id="preset">Preset Cities</button>
       <div class="draw" id="draw"></div>
       <button type="submit">Run Simulation</button>
     </form>
-    <canvas class="hidden" height="500" width="500"></canvas>
+    <div>
+      <canvas class="hidden" height="500" width="500"></canvas>
+    </div>
     <button class="hidden" id="reset">Reset</button>
   </body>
 </html>

@@ -4,6 +4,7 @@ console.log('creating worker')
 const worker = new Worker('./worker.js')
 
 const draw = document.getElementById('draw')
+const preset = document.getElementById('preset')
 const form = document.getElementById('simulation')
 const reset = document.getElementById('reset')
 const canvas = document.querySelector('canvas')
@@ -17,7 +18,41 @@ draw.onclick = function(event) {
   draw.appendChild(dot)
 }
 
+preset.onclick = function(event) {
+  event.preventDefault()
+
+  const cities = [
+    [269, 101],
+    [458, 297],
+    [161, 173],
+    [43, 25],
+    [453, 101],
+    [244, 398],
+    [45, 166],
+    [269, 179],
+    [374, 97],
+    [129, 301],
+    [456, 187],
+    [459, 398],
+    [353, 399],
+    [43, 88],
+    [129, 402]
+  ]
+
+  cities.forEach(c => {
+    const city = document.createElement('div')
+    city.className = 'dot'
+    city.style = `top: ${c[1]}px; left: ${c[0]}px;`
+    city.setAttribute('data-x', c[0])
+    city.setAttribute('data-y', c[1])
+    draw.appendChild(city)
+  })
+
+  event.target.remove()
+}
+
 form.onsubmit = function(event) {
+  console.log('submit')
   event.preventDefault()
   const [iterations, population_size, crossover, mutation, survival] = event.target
   const draw = document.getElementById('draw')
@@ -77,5 +112,6 @@ reset.onclick = function() {
   const ctx = canvas.getContext('2d')
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   canvas.className = 'hidden'
+  reset.className = 'hidden'
   form.className = ''
 }
