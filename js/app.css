@@ -50,3 +50,24 @@ html {
 .submit, .reset {
   margin-left: 20px;
 }
+
+.loading {
+  margin-left: 20px;
+  animation-name: loading;
+  animation-duration: 1s;
+  animation-timing-function: ease-out;
+  animation-direction: alternate;
+  animation-iteration-count: infinite;
+  animation-fill-mode: none;
+  animation-play-state: running;
+}
+
+@keyframes loading {
+  0% {
+    opacity: 0.3;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}

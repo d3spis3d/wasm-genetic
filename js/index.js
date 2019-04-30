@@ -7,6 +7,7 @@ const preset = document.getElementById('preset')
 const form = document.getElementById('simulation')
 const reset = document.getElementById('reset')
 const canvas = document.querySelector('canvas')
+const loading = document.getElementById('loading')
 
 function addDot(x, y) {
   const dot = document.createElement('div')
@@ -66,6 +67,8 @@ form.onsubmit = function(event) {
 
   event.target.className = 'hidden'
   canvas.className = 'solution'
+  loading.className = 'loading'
+
 
   const ctx = canvas.getContext('2d')
 
@@ -99,6 +102,7 @@ form.onsubmit = function(event) {
     }
 
     reset.className = 'reset'
+    loading.className = 'hidden'
   }
 }
 
@@ -107,5 +111,6 @@ reset.onclick = function() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   canvas.className = 'hidden'
   reset.className = 'hidden'
+  loading.className = 'hidden'
   form.className = ''
 }
