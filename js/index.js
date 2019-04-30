@@ -1,6 +1,5 @@
 import "./app.css"
 
-console.log('creating worker')
 const worker = new Worker('./worker.js')
 
 const draw = document.getElementById('draw')
@@ -9,13 +8,17 @@ const form = document.getElementById('simulation')
 const reset = document.getElementById('reset')
 const canvas = document.querySelector('canvas')
 
-draw.onclick = function(event) {
+function addDot(x, y) {
   const dot = document.createElement('div')
   dot.className = 'dot'
-  dot.style = `top: ${event.offsetY}px; left: ${event.offsetX}px;`
-  dot.setAttribute('data-x', event.offsetX)
-  dot.setAttribute('data-y', event.offsetY)
+  dot.style = `top: ${y}px; left: ${x}px;`
+  dot.setAttribute('data-x', x)
+  dot.setAttribute('data-y', y)
   draw.appendChild(dot)
+}
+
+draw.onclick = function(event) {
+  addDot(event.offsetX, event.offsetY)
 }
 
 preset.onclick = function(event) {
@@ -40,27 +43,23 @@ preset.onclick = function(event) {
   ]
 
   cities.forEach(c => {
-    const city = document.createElement('div')
-    city.className = 'dot'
-    city.style = `top: ${c[1]}px; left: ${c[0]}px;`
-    city.setAttribute('data-x', c[0])
-    city.setAttribute('data-y', c[1])
-    draw.appendChild(city)
+    addDot(c[0], c[1])
   })
 
   event.target.remove()
 }
 
 form.onsubmit = function(event) {
-  console.log('submit')
   event.preventDefault()
   const [iterations, population_size, crossover, mutation, survival] = event.target
-  const draw = document.getElementById('draw')
 
   const cities = []
   const count = draw.children.length
   for (let c = 0; c < count; c++) {
-    cities.push([draw.children[c].getAttribute('data-x'), draw.children[c].getAttribute('data-y')])
+    cities.push([
+      draw.children[c].getAttribute('data-x'),
+      draw.children[c].getAttribute('data-y')
+    ])
   }
 
   const citiesString = cities.map(c => c.join(',')).join(';')
@@ -69,7 +68,6 @@ form.onsubmit = function(event) {
   canvas.className = 'solution'
 
   const ctx = canvas.getContext('2d')
-  ctx.save()
 
   cities.map(c => {
     ctx.beginPath()
@@ -84,14 +82,10 @@ form.onsubmit = function(event) {
     population_size: parseInt(population_size.value, 10),
     crossover: parseFloat(crossover.value),
     mutation: parseFloat(mutation.value),
-    survival: parseFloat(survival.value),
-    type: 'simulation'
+    survival: parseFloat(survival.value)
   })
 
   worker.onmessage = function(msg) {
-    console.log('got sim results')
-    console.log(msg.data)
-
     const { path, fitness } = msg.data
 
     for (let p = 0; p < path.length - 1; p++) {

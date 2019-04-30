@@ -5,28 +5,41 @@
     <title>WASM Genetic Algorithm</title>
   </head>
   <body>
-    <h1>Travelling Salesman Problem</h1>
-    <h2>Solved with a Genetic Algorithm</h2>
+    <h1 class="heading">Travelling Salesman Problem</h1>
+    <h2 class="subheading">Solved with a Genetic Algorithm</h2>
     <form id="simulation">
-      <label>Iterations</label>
-      <input name="iterations" value="500"/>
-      <br />
-      <label>Population size</label>
-      <input name="pop_size"  value="350"/>
-      <br />
-      <label>Crossover rate</label>
-      <input name="crossover" value="0.5"/>
-      <br />
-      <label>Mutation rate</label>
-      <input name="mutation" value="0.01"/>
-      <br />
-      <label>Survival rate</label>
-      <input name="survival" value="0.3"/>
-      <br />
-      <label>Draw your cities</label>
-      <button id="preset">Preset Cities</button>
+      <div class="form-container">
+        <div class="form-column">
+          <div class="form-element">
+            <label>Iterations</label>
+            <input name="iterations" value="500"/>
+          </div>
+          <div class="form-element">
+            <label>Population size</label>
+            <input name="pop_size"  value="350"/>
+          </div>
+          <div class="form-element">
+            <label>Crossover rate</label>
+            <input name="crossover" value="0.5"/>
+          </div>
+        </div>
+        <div class="form-column">
+          <div class="form-element">
+            <label>Mutation rate</label>
+            <input name="mutation" value="0.01"/>
+          </div>
+          <div class="form-element">
+            <label>Survival rate</label>
+            <input name="survival" value="0.3"/>
+          </div>
+          <div class="form-element">
+            <label>Draw your cities or</label>
+            <button id="preset">Preset Cities</button>
+          </div>
+        </div>
+      </div>
       <div class="draw" id="draw"></div>
-      <button type="submit">Run Simulation</button>
+      <button class="submit" type="submit">Run Simulation</button>
     </form>
     <div>
       <canvas class="hidden" height="500" width="500"></canvas>

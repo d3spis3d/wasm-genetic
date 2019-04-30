@@ -1,8 +1,30 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto');
+
+html {
+  font-family: 'Roboto', sans-serif;
+}
+
+.heading, .subheading {
+  margin-left: 20px;
+}
+
+.form-container {
+  display: flex;
+}
+
+.form-element {
+  display: flex;
+  width: 250px;
+  justify-content: space-between;
+  padding: 10px 20px;
+}
+
 .draw {
   position: relative;
   width: 500px;
   height: 500px;
   border: 1px solid black;
+  margin: 10px 20px;
 }
 
 .dot {
@@ -22,4 +44,9 @@
   width: 500px;
   height: 500px;
   border: 1px solid black;
+  margin: 0 20px;
+}
+
+.submit, .reset {
+  margin-left: 20px;
 }
