@@ -15,20 +15,6 @@ use rand::distributions::{Distribution, Uniform};
 #[global_allocator]
 static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
 
-// Called by our JS entry point to run the example.
-#[wasm_bindgen]
-pub fn run() {
-    set_panic_hook();
-}
-
-fn set_panic_hook() {
-    // When the `console_error_panic_hook` feature is enabled, we can call the
-    // `set_panic_hook` function to get better error messages if we ever panic.
-    #[cfg(feature = "console_error_panic_hook")]
-    console_error_panic_hook::set_once();
-}
-
-#[wasm_bindgen]
 pub struct City {
     x: f64,
     y: f64,
@@ -48,13 +34,13 @@ pub struct Path {
 
 impl Path {
     pub fn breed(&self, other: &Path, city_list: &Vec<City>) -> Path {
-        let order = Path::crossover_order(&self.order, &other.order);
+        let order = Path::crossover(&self.order, &other.order);
         let fitness = Path::calculate_fitness(&order, city_list);
 
         Path { fitness, order }
     }
 
-    fn crossover_order(mother: &Vec<usize>, father: &Vec<usize>) -> Vec<usize> {
+    fn crossover(mother: &Vec<usize>, father: &Vec<usize>) -> Vec<usize> {
         let mut rng = OsRng::new().unwrap();
         let crossover_point = rng.sample(Uniform::new(0, mother.len()));
 
@@ -134,7 +120,6 @@ impl Simulation {
         }
     }
 
-    #[wasm_bindgen]
     pub fn run(&mut self) -> Array {
         let mut fittest = self.find_fittest();
         println!("starting iterations");
@@ -144,14 +129,9 @@ impl Simulation {
             self.generate_next_generation();
 
             let challenger = self.find_fittest();
-
-            // println!("challenger {} Fittest {}", challenger.fitness, fittest.fitness);
             if challenger.fitness > fittest.fitness {
                 fittest = challenger;
             }
-
-            // println!("{}", fittest);
-            // print_generation(&self.population);
         }
 
         let array = js_sys::Array::new();
@@ -184,6 +164,7 @@ impl Simulation {
 
         let breeding_count = (self.population.len() as f64 * self.crossover_rate) as usize;
         let surviving_parent_count = (breeding_count as f64 * self.survival_rate) as usize;
+        let surviving_weak_count = 2;
 
         let mut breeding_population = Vec::new();
         breeding_population.extend_from_slice(&self.population[0..breeding_count]);
@@ -191,7 +172,7 @@ impl Simulation {
         let mut offspring = Vec::new();
         let mut rng = OsRng::new().unwrap();
 
-        for i in 0..self.population.len() - surviving_parent_count - 2 {
+        for i in 0..(self.population.len() - surviving_parent_count - surviving_weak_count) {
             let pcnt_range = Uniform::new(0, breeding_population.len());
             let rs = rng.sample(pcnt_range);
             offspring.push(
@@ -205,7 +186,10 @@ impl Simulation {
         let mut next_generation = Vec::new();
         next_generation.extend_from_slice(&self.population[0..surviving_parent_count]);
         next_generation.append(&mut offspring);
-        next_generation.extend_from_slice(&self.population[self.population.len() - 2..self.population.len()]);
+        // Add a few weak units to keep the genetic diversity
+        next_generation.extend_from_slice(
+            &self.population[(self.population.len() - surviving_weak_count)..self.population.len()]
+        );
 
         let mut rng = OsRng::new().unwrap();
 
@@ -244,12 +228,5 @@ impl Simulation {
         }).collect();
 
         cities
-    }
-}
-
-fn print_generation(generation: &Vec<Path>) {
-    println!("Generation");
-    for p in 0..10 {
-        println!("{}", generation[p]);
     }
 }
