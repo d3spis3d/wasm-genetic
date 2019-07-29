@@ -3,8 +3,7 @@ use std::fmt;
 use wasm_bindgen::prelude::*;
 use js_sys::Array;
 
-use rand::Rng;
-use rand::rngs::OsRng;
+use rand::{thread_rng, Rng};
 use rand::seq::SliceRandom;
 use rand::distributions::{Distribution, Uniform};
 
@@ -41,8 +40,8 @@ impl Path {
     }
 
     fn crossover(mother: &Vec<usize>, father: &Vec<usize>) -> Vec<usize> {
-        let mut rng = OsRng::new().unwrap();
-        let crossover_point = rng.sample(Uniform::new(0, mother.len()));
+        let mut rng = thread_rng();
+        let crossover_point = Uniform::new(0, mother.len()).sample(&mut rng);
 
         let mother_dna = &mother[0..crossover_point];
         let mut father_dna: Vec<usize> = father.iter().filter_map(|d| {
@@ -60,9 +59,9 @@ impl Path {
     }
 
     pub fn mutate(&mut self, city_list: &Vec<City>) {
-        let mut rng = OsRng::new().unwrap();
-        let point_one = rng.sample(Uniform::new(0, self.order.len()));
-        let point_two = rng.sample(Uniform::new(0, self.order.len()));
+        let mut rng = thread_rng();
+        let point_one = Uniform::new(0, self.order.len()).sample(&mut rng);
+        let point_two = Uniform::new(0, self.order.len()).sample(&mut rng);
 
         self.order.swap(point_one, point_two);
         self.fitness = Path::calculate_fitness(&self.order, &city_list);
@@ -170,11 +169,11 @@ impl Simulation {
         breeding_population.extend_from_slice(&self.population[0..breeding_count]);
 
         let mut offspring = Vec::new();
-        let mut rng = OsRng::new().unwrap();
+        let mut rng = thread_rng();
+        let pcnt_range = Uniform::new(0, breeding_population.len());
 
         for i in 0..(self.population.len() - surviving_parent_count - surviving_weak_count) {
-            let pcnt_range = Uniform::new(0, breeding_population.len());
-            let rs = rng.sample(pcnt_range);
+            let rs = pcnt_range.sample(&mut rng);
             offspring.push(
                 breeding_population[i % breeding_population.len()].breed(
                     &breeding_population[rs],
@@ -191,10 +190,8 @@ impl Simulation {
             &self.population[(self.population.len() - surviving_weak_count)..self.population.len()]
         );
 
-        let mut rng = OsRng::new().unwrap();
-
         for p in 0..next_generation.len() {
-            if rng.gen_bool(self.mutation_rate) {
+            if thread_rng().gen_bool(self.mutation_rate) {
                 next_generation[p].mutate(&self.city_list);
             }
         }
@@ -208,7 +205,7 @@ impl Simulation {
 
         for _ in 0..population_count {
             let mut p = base_list.clone();
-            let mut rng = OsRng::new().unwrap();
+            let mut rng = thread_rng();
             p.shuffle(&mut rng);
             let fitness = Path::calculate_fitness(&p, city_list);
 
