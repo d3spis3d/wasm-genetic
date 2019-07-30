@@ -24,7 +24,6 @@ html {
   width: 500px;
   height: 500px;
   border: 1px solid black;
-  margin: 10px 20px;
 }
 
 .dot {
@@ -45,10 +44,6 @@ html {
   height: 500px;
   border: 1px solid black;
   margin: 0 20px;
-}
-
-.submit, .reset {
-  margin-left: 20px;
 }
 
 .loading {

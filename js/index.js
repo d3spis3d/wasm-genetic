@@ -5,6 +5,7 @@ const worker = new Worker('./worker.js')
 const draw = document.getElementById('draw')
 const preset = document.getElementById('preset')
 const form = document.getElementById('simulation')
+const simulationContainer = document.getElementById('simulation-container')
 const reset = document.getElementById('reset')
 const canvas = document.querySelector('canvas')
 const loading = document.getElementById('loading')
@@ -65,7 +66,8 @@ form.onsubmit = function(event) {
 
   const citiesString = cities.map(c => c.join(',')).join(';')
 
-  event.target.className = 'hidden'
+  simulationContainer.className = 'hidden'
+  draw.className = 'hidden'
   canvas.className = 'solution'
   loading.className = 'loading'
 
@@ -101,7 +103,7 @@ form.onsubmit = function(event) {
       ctx.stroke()
     }
 
-    reset.className = 'reset'
+    reset.className = 'btn btn-dark'
     loading.className = 'hidden'
   }
 }
@@ -110,7 +112,8 @@ reset.onclick = function() {
   const ctx = canvas.getContext('2d')
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   canvas.className = 'hidden'
-  reset.className = 'hidden'
+  reset.className = 'hidden btn btn-dark'
   loading.className = 'hidden'
-  form.className = ''
+  simulationContainer.className = 'col py-3'
+  draw.className = 'draw'
 }
